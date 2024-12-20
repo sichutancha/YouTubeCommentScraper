@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube评论报告 - YouTube Comment Report</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        .video-container {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .video-header {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            gap: 20px;
+        }
+        
+        .video-thumbnail {
+            width: 200px;
+            height: 112px;
+            object-fit: cover;
+            border-radius: 4px;
+        }
+        
+        .video-info {
+            flex-grow: 1;
+        }
+        
+        .video-title {
+            font-size: 1.5em;
+            margin: 0 0 10px 0;
+            color: #030303;
+        }
+        
+        .video-link {
+            color: #065fd4;
+            text-decoration: none;
+            display: block;
+            margin-bottom: 10px;
+            word-break: break-all;
+        }
+        
+        .video-link:hover {
+            text-decoration: underline;
+        }
+        
+        .comment-count {
+            color: #606060;
+            font-size: 0.9em;
+        }
+        
+        .comments {
+            margin-top: 20px;
+        }
+        
+        .comment {
+            border-left: 3px solid #065fd4;
+            padding: 10px 15px;
+            margin-bottom: 15px;
+            background-color: #f8f9fa;
+            border-radius: 0 4px 4px 0;
+        }
+        
+        .comment.reply {
+            margin-left: 30px;
+            border-left-color: #909090;
+        }
+        
+        .comment-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+        
+        .comment-author {
+            font-weight: 500;
+            color: #030303;
+        }
+        
+        .comment-meta {
+            font-size: 0.85em;
+            color: #606060;
+        }
+        
+        .comment-text {
+            margin: 5px 0;
+            white-space: pre-wrap;
+        }
+        
+        .comment-stats {
+            font-size: 0.85em;
+            color: #606060;
+        }
+        
+        @media (max-width: 768px) {
+            .video-header {
+                flex-direction: column;
+            }
+            
+            .video-thumbnail {
+                width: 100%;
+                height: auto;
+            }
+            
+            .comment.reply {
+                margin-left: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    {% for video in videos %}
+    <div class="video-container">
+        <div class="video-header">
+            {% if video.thumbnail %}
+            <img class="video-thumbnail" src="{{ video.thumbnail }}" alt="视频缩略图">
+            {% endif %}
+            <div class="video-info">
+                <h2 class="video-title">{{ video.title }}</h2>
+                <a href="{{ video.url }}" class="video-link" target="_blank">{{ video.url }}</a>
+                <div class="comment-count">评论数: {{ video.comments|length }}</div>
+            </div>
+        </div>
+        
+        <div class="comments">
+            {% for comment in video.comments %}
+            <div class="comment {% if comment.is_reply %}reply{% endif %}">
+                <div class="comment-header">
+                    <span class="comment-author">{{ comment.author }}</span>
+                    <span class="comment-meta">{{ comment.published_at }}</span>
+                </div>
+                <div class="comment-text">{{ comment.text }}</div>
+                <div class="comment-stats">
+                    点赞数: {{ comment.like_count }}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endfor %}
+</body>
+</html>
