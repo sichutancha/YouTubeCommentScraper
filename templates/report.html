@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube 视频评论报告 YouTube Comment Report</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .video-section {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .video-title {
+            color: #c4302b;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #eee;
+        }
+        
+        .video-info {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .video-thumbnail {
+            width: 200px;
+            margin-right: 20px;
+            border-radius: 4px;
+        }
+        
+        .video-stats {
+            color: #666;
+        }
+        
+        .comment {
+            border-left: 3px solid #c4302b;
+            margin: 15px 0;
+            padding: 10px 15px;
+            background: #f9f9f9;
+        }
+        
+        .comment-header {
+            display: flex;
+            justify-content: space-between;
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 5px;
+        }
+        
+        .comment-author {
+            color: #c4302b;
+            font-weight: bold;
+        }
+        
+        .comment-text {
+            margin: 5px 0;
+        }
+        
+        .likes {
+            color: #666;
+            font-size: 0.9em;
+        }
+        
+        .channel-info {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .channel-title {
+            font-size: 24px;
+            color: #c4302b;
+            margin-bottom: 10px;
+        }
+        
+        .stats-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .stat-box {
+            background: #f8f8f8;
+            padding: 10px 20px;
+            border-radius: 4px;
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 20px;
+            font-weight: bold;
+            color: #c4302b;
+        }
+        
+        .stat-label {
+            color: #666;
+            font-size: 14px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="channel-info">
+            <h1 class="channel-title">{{ channel_title }}</h1>
+            <div class="stats-container">
+                <div class="stat-box">
+                    <div class="stat-number">{{ total_videos }}</div>
+                    <div class="stat-label">视频总数</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">{{ total_comments }}</div>
+                    <div class="stat-label">评论总数</div>
+                </div>
+            </div>
+        </div>
+
+        {% for video in videos %}
+        <div class="video-section">
+            <h2 class="video-title">{{ video.title }}</h2>
+            <div class="video-info">
+                <img class="video-thumbnail" src="{{ video.thumbnail }}" alt="视频缩略图">
+                <div class="video-stats">
+                    <p>发布时间: {{ video.published_at }}</p>
+                    <p>观看次数: {{ video.view_count }}</p>
+                    <p>点赞数: {{ video.like_count }}</p>
+                </div>
+            </div>
+
+            <div class="comments-section">
+                <h3>评论 ({{ video.comments|length }})</h3>
+                {% for comment in video.comments %}
+                <div class="comment">
+                    <div class="comment-header">
+                        <span class="comment-author">{{ comment.author }}</span>
+                        <span class="comment-date">{{ comment.published_at }}</span>
+                    </div>
+                    <div class="comment-text">{{ comment.text }}</div>
+                    <div class="likes">👍 {{ comment.like_count }}</div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</body>
+
+</html>
